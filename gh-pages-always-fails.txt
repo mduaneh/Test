@@ -1,0 +1,324 @@
+Last login: Tue Apr 29 16:50:22 on ttys004
+mhale-mac:docs mhale$ cd Dowl
+mhale-mac:docs mhale$ cd
+mhale-mac:~ mhale$ cd Download
+-bash: cd: Download: No such file or directory
+mhale-mac:~ mhale$ cd Downloads/
+mhale-mac:Downloads mhale$ pwd
+/Users/mhale/Downloads
+mhale-mac:Downloads mhale$ mkdir Test
+mhale-mac:Downloads mhale$ cd Test/
+mhale-mac:Test mhale$ git clone git@github.com:mduaneh/Test.git
+Cloning into 'Test'...
+Warning: Permanently added 'github.com,192.30.252.129' (RSA) to the list of known hosts.
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (3/3), done.
+Checking connectivity... done.
+mhale-mac:Test mhale$ cd Test/
+mhale-mac:Test mhale$ ll
+total 8
+-rw-r--r--  1 mhale  _softwareupdate  27 Apr 29 17:20 README.md
+mhale-mac:Test mhale$ git remote -vv
+origin	git@github.com:mduaneh/Test.git (fetch)
+origin	git@github.com:mduaneh/Test.git (push)
+mhale-mac:Test mhale$ cp ~/git/miscellaneous/docs/Template.adoc Test.adoc
+mhale-mac:Test mhale$ vi Test.adoc 
+mhale-mac:Test mhale$ cat Test.adoc 
+= TITLE HERE =
+Michael D. Hale <mhale@qualcomm.com>
+:toc: left
+:imagesdir: ./images
+:docinfo1:
+mhale-mac:Test mhale$ vi Test.adoc 
+mhale-mac:Test mhale$ cp ~/git/miscellaneous/Makefiles/AsciiDoctor.Makefile Makefile
+mhale-mac:Test mhale$ cat Makefile
+html:
+all: html pdf
+
+%.html: %.adoc
+	asciidoctor -b html5 $< -o $@
+%.xml: %.adoc
+	asciidoctor -b docbook5 $< -o $@
+%.pdf: %.adoc
+	asciidoctor -b docbook5 $< -o $(basename $@).xml
+	fopub $(basename $@).xml &> $(basename $@).pdf.log
+	@if [ -e "$(basename $@).pdf" ]; then rm -f $(basename $@).pdf.log $(basename $@).xml; else echo "$(basename $@).pdf generation error"; exit 1; fi
+
+clean:
+	-rm -f ${HTML_SOURCES} ${PDF_SOURCES} ${XML_SOURCES} ${PDF_LOGS}
+
+ADOC_SOURCES:=$(shell ls *.adoc)
+HTML_SOURCES:=$(patsubst %.adoc,%.html,${ADOC_SOURCES})
+PDF_SOURCES:=$(patsubst %.adoc,%.pdf,${ADOC_SOURCES})
+PDF_LOGS:=$(patsubst %.adoc,%.pdf.log,${ADOC_SOURCES})
+XML_SOURCES:=$(patsubst %.adoc,%.xml,${ADOC_SOURCES})
+
+echo:
+	echo "ADOCS:  ${ADOC_SOURCES}"
+	echo "HTML:   ${HTML_SOURCES}"
+	echo "PDF:    ${PDF_SOURCES}"
+	echo "XML:    ${XML_SOURCES}"
+
+pdf:  ${PDF_SOURCES}
+html: ${HTML_SOURCES}
+
+.SILENT:  echo
+.PHONY:   clean html pdf all
+mhale-mac:Test mhale$ pwd
+/Users/mhale/Downloads/Test/Test
+mhale-mac:Test mhale$ cd ../
+mhale-mac:Test mhale$ git status
+fatal: Not a git repository (or any of the parent directories): .git
+mhale-mac:Test mhale$ cd Test/
+mhale-mac:Test mhale$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	Makefile
+	Test.adoc
+
+nothing added to commit but untracked files present (use "git add" to track)
+mhale-mac:Test mhale$ git add -A
+mhale-mac:Test mhale$ git commit -m"Adding my sample files"
+[master ed12d12] Adding my sample files
+ 2 files changed, 37 insertions(+)
+ create mode 100644 Makefile
+ create mode 100644 Test.adoc
+mhale-mac:Test mhale$ git push
+warning: push.default is unset; its implicit value is changing in
+Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the current behavior after the default changes, use:
+
+  git config --global push.default matching
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+
+When push.default is set to 'matching', git will push local branches
+to the remote branches that already exist with the same name.
+
+In Git 2.0, Git will default to the more conservative 'simple'
+behavior, which only pushes the current branch to the corresponding
+remote branch that 'git pull' uses to update the current branch.
+
+See 'git help config' and search for 'push.default' for further information.
+(the 'simple' mode was introduced in Git 1.7.11. Use the similar mode
+'current' instead of 'simple' if you sometimes use older versions of Git)
+
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 774 bytes | 0 bytes/s, done.
+Total 4 (delta 0), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+   be389da..ed12d12  master -> master
+mhale-mac:Test mhale$ git checkout gh-pages
+error: pathspec 'gh-pages' did not match any file(s) known to git.
+mhale-mac:Test mhale$ git branch gh-pages
+mhale-mac:Test mhale$ git checkout gh-pages
+Switched to branch 'gh-pages'
+mhale-mac:Test mhale$ git push origin gh-pages
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+Total 0 (delta 0), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+ * [new branch]      gh-pages -> gh-pages
+mhale-mac:Test mhale$ git remove -vv
+git: 'remove' is not a git command. See 'git --help'.
+
+Did you mean this?
+	remote
+mhale-mac:Test mhale$ 
+mhale-mac:Test mhale$ git remote -vv
+origin	git@github.com:mduaneh/Test.git (fetch)
+origin	git@github.com:mduaneh/Test.git (push)
+mhale-mac:Test mhale$ git remote -vvv
+origin	git@github.com:mduaneh/Test.git (fetch)
+origin	git@github.com:mduaneh/Test.git (push)
+mhale-mac:Test mhale$ git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+mhale-mac:Test mhale$ vi Test.adoc 
+mhale-mac:Test mhale$ echo "New Change" >> Test.adoc 
+mhale-mac:Test mhale$ git add Test.adoc 
+mhale-mac:Test mhale$ git commit -m"Adding a first Change"
+[master 11bc58a] Adding a first Change
+ 1 file changed, 1 insertion(+)
+mhale-mac:Test mhale$ git push
+warning: push.default is unset; its implicit value is changing in
+Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the current behavior after the default changes, use:
+
+  git config --global push.default matching
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+
+When push.default is set to 'matching', git will push local branches
+to the remote branches that already exist with the same name.
+
+In Git 2.0, Git will default to the more conservative 'simple'
+behavior, which only pushes the current branch to the corresponding
+remote branch that 'git pull' uses to update the current branch.
+
+See 'git help config' and search for 'push.default' for further information.
+(the 'simple' mode was introduced in Git 1.7.11. Use the similar mode
+'current' instead of 'simple' if you sometimes use older versions of Git)
+
+Warning: Permanently added 'github.com,192.30.252.130' (RSA) to the list of known hosts.
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 299 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+   ed12d12..11bc58a  master -> master
+mhale-mac:Test mhale$ git checkout gh-pages
+Switched to branch 'gh-pages'
+mhale-mac:Test mhale$ git rebase master
+First, rewinding head to replay your work on top of it...
+Fast-forwarded gh-pages to master.
+mhale-mac:Test mhale$ git push origin gh-pages
+Warning: Permanently added 'github.com,192.30.252.129' (RSA) to the list of known hosts.
+Total 0 (delta 0), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+   ed12d12..11bc58a  gh-pages -> gh-pages
+mhale-mac:Test mhale$ gmake
+asciidoctor -b html5 Test.adoc -o Test.html
+mhale-mac:Test mhale$ git add Test.html 
+mhale-mac:Test mhale$ git commit -m"Adding html"
+[gh-pages e76f163] Adding html
+ 1 file changed, 383 insertions(+)
+ create mode 100644 Test.html
+mhale-mac:Test mhale$ git push origin gh-pages
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+Counting objects: 4, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 6.73 KiB | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+   11bc58a..e76f163  gh-pages -> gh-pages
+mhale-mac:Test mhale$ git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+mhale-mac:Test mhale$ echo "New Change #2" >> Test.adoc 
+mhale-mac:Test mhale$ git add Test.adoc 
+mhale-mac:Test mhale$ git commit -m"Adding a second Change"
+[master d66e7d0] Adding a second Change
+ 1 file changed, 1 insertion(+)
+mhale-mac:Test mhale$ git push
+warning: push.default is unset; its implicit value is changing in
+Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the current behavior after the default changes, use:
+
+  git config --global push.default matching
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+
+When push.default is set to 'matching', git will push local branches
+to the remote branches that already exist with the same name.
+
+In Git 2.0, Git will default to the more conservative 'simple'
+behavior, which only pushes the current branch to the corresponding
+remote branch that 'git pull' uses to update the current branch.
+
+See 'git help config' and search for 'push.default' for further information.
+(the 'simple' mode was introduced in Git 1.7.11. Use the similar mode
+'current' instead of 'simple' if you sometimes use older versions of Git)
+
+Warning: Permanently added 'github.com,192.30.252.130' (RSA) to the list of known hosts.
+Counting objects: 6, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 302 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@github.com:mduaneh/Test.git
+   11bc58a..d66e7d0  master -> master
+mhale-mac:Test mhale$ git checkout gh-pages
+Switched to branch 'gh-pages'
+mhale-mac:Test mhale$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: Adding html
+mhale-mac:Test mhale$ git status
+On branch gh-pages
+nothing to commit, working directory clean
+mhale-mac:Test mhale$ gmake
+make: Nothing to be done for `html'.
+mhale-mac:Test mhale$ gmake -B
+asciidoctor -b html5 Test.adoc -o Test.html
+mhale-mac:Test mhale$ git status
+On branch gh-pages
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   Test.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mhale-mac:Test mhale$ git add Test.html 
+mhale-mac:Test mhale$ git commit -m"Updating html"
+[gh-pages ee582ad] Updating html
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+mhale-mac:Test mhale$ git push 
+warning: push.default is unset; its implicit value is changing in
+Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the current behavior after the default changes, use:
+
+  git config --global push.default matching
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+
+When push.default is set to 'matching', git will push local branches
+to the remote branches that already exist with the same name.
+
+In Git 2.0, Git will default to the more conservative 'simple'
+behavior, which only pushes the current branch to the corresponding
+remote branch that 'git pull' uses to update the current branch.
+
+See 'git help config' and search for 'push.default' for further information.
+(the 'simple' mode was introduced in Git 1.7.11. Use the similar mode
+'current' instead of 'simple' if you sometimes use older versions of Git)
+
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+To git@github.com:mduaneh/Test.git
+ ! [rejected]        gh-pages -> gh-pages (non-fast-forward)
+error: failed to push some refs to 'git@github.com:mduaneh/Test.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+mhale-mac:Test mhale$ git push origin gh-pages
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+To git@github.com:mduaneh/Test.git
+ ! [rejected]        gh-pages -> gh-pages (non-fast-forward)
+error: failed to push some refs to 'git@github.com:mduaneh/Test.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+mhale-mac:Test mhale$ git pull
+Warning: Permanently added 'github.com,192.30.252.130' (RSA) to the list of known hosts.
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> gh-pages
+
+mhale-mac:Test mhale$ echo "This is where I always get stuck"
+This is where I always get stuck
+mhale-mac:Test mhale$ 
